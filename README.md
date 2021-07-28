@@ -6,4 +6,4 @@ Our client wants us to deploy some serverless ionfrastructure ahead of the devel
 
 For our MVP we want to deploy a serverless function that is triggered by a message being published to a topic. At this stage the function should simply log that it has been called to the relevent cloud logging solution. Finally we want to create an alert that fires from those logs being written. The function itself doesn't have to do any real work or contai any business logic, the developers will pick that up later.
 
-For this test you can't use the web console to deploy resources, we expect you to use the CLI or some infrastructure as code tool such as teraform.
+For this test you can't use the web console to deploy resources, we expect you to use the CLI or some infrastructure as code tool such as teraform. Please be sure to delete all resources (excluding the topic) once the test is completed.
