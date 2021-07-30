@@ -6,8 +6,13 @@ const expect = chai.expect;
 var event, context;
 
 describe('Tests index', function () {
+    event = { Records: [
+        {
+          Sns: { Message: "hello world" }
+        }
+      ]}
     it('verifies successful response', async () => {
-        const result = await app.lambdaHandler(event, context)
+        const result = await app.buildCircleHandler(event, context)
 
         expect(result).to.be.an('object');
         expect(result.statusCode).to.equal(200);
