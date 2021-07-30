@@ -2,8 +2,6 @@ let response;
 
 exports.buildCircleHandler = async (event, context) => {
     let message = event.Records[0].Sns.Message
-    console.log(event)
-    console.log(message)
     try {
         // const ret = await axios(url);
         response = {

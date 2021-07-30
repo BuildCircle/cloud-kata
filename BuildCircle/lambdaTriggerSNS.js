@@ -1,9 +1,10 @@
 var AWS = require('aws-sdk');
+require('dotenv').config();
 
-var sns = new AWS.SNS({ region: "eu-west-2" });
+var sns = new AWS.SNS({ region: process.env.GB_REGION });
 
 var params= { 
-    TargetArn: "arn:aws:sns:eu-west-2:952749416031:SNSBuildCircleTopic",
+    TargetArn: process.env.TOPIC_ARN,
     Message: "Hello from SNS",
     Subject: "TestSNS"
 };
