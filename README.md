@@ -1,4 +1,4 @@
-# Build Circle Serverless Devops Tech Test
+# Serverless Cloud Kata
 
 Our client wants us to deploy some serverless ionfrastructure ahead of the development team who will be building a new worker next sprint. We have to implement the following architecture in either AWS or Azure. The infrastructure has to be deployed in the United Kingdom. Additionally write a small console application to publish messages to the topic.
 
