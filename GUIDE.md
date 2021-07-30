@@ -98,5 +98,9 @@ BuildCircle$ npm run test
 ## How to send SNS
 
 Go to the same directory as the lambda and open the terminal.
-Once there, run the command `node lambdaTriggerSNS.js`. This will send an SNS message that will trigger the lambda on AWS.
+
+Once there, run the command `node lambdaTriggerSNS.js`. 
+
+This will send an SNS message that will trigger the lambda on AWS.
+
 After that, you can check the logs on CloudWatch to make sure it is working.
