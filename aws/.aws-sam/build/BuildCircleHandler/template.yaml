@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  devops-test
+
+  Sample SAM Template for devops-test
+  
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  BuildCircleHandler:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: BuildCircle
+      Handler: app.buildCircleHandler
+      Runtime: nodejs14.x
+      Events:
+        SNSRecieved:
+          Type: SNS
+          Properties:
+            Topic: !Ref SNSBuildCircleTopic
+
+  BuildCircleInvokePermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      Action: "lambda:InvokeFunction"
+      FunctionName: !Ref BuildCircleHandler
+      Principal: sns.amazonaws.com
+
+  SNSBuildCircleTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: !Sub "SNSBuildCircleTopic"
+      TopicName: !Sub "SNSBuildCircleTopic"
+      Subscription:
+        - Protocol: lambda
+          Endpoint: !GetAtt BuildCircleHandler.Arn
+    
+  SNSBuildCircleTopicPolicy:
+    Type: "AWS::SNS::TopicPolicy"
+    Properties:
+      Topics:
+        - !Ref SNSBuildCircleTopic
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: "sns:Publish"
+            Resource: !Ref SNSBuildCircleTopic
+            Principal: "*"
