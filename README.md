@@ -1,6 +1,6 @@
 # Build Circle Serverless Devops Tech Test
 
-Our client wants us to deploy some serverless ionfrastructure ahead of the development team who will be building a new worker next sprint. We have to implement the following architecture in either AWS or Azure. A template has already been provided to create the topic, so we can build on top of that. The infrastructure has to be deployed in the United Kingdom.
+Our client wants us to deploy some serverless infrastructure ahead of the development team who will be building a new worker next sprint. We have to implement the following architecture in either AWS or Azure. A template has already been provided to create the topic, so we can build on top of that. The infrastructure has to be deployed in the United Kingdom.
 
 ![Screenshot from 2021-07-08 09-25-27](https://user-images.githubusercontent.com/1591497/124888961-81456d80-dfce-11eb-8ec7-149d3eb2939d.png)
 
