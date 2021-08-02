@@ -1,4 +1,3 @@
 node_modules
-.aws_sam
+.aws_sam/
 .env
-build.toml
