@@ -77,3 +77,28 @@ Resources:
       Period: 60
       Statistic: Sum
       Threshold: '1'
+
+  Alarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: onLogAlarm
+      AlarmActions:
+        - !Ref AlarmSNSTopic
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref BuildCircleHandler
+      EvaluationPeriods: 1
+      MetricName: Errors
+      Namespace: AWS/Lambda
+      Period: 60
+      Statistic: Sum
+      Threshold: '1'
+
+  AlarmSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: AlarmTopic
+      Subscription:
+      - Protocol: email
+        Endpoint: 
