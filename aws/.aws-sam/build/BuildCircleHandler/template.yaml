@@ -1,5 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
+
 Description: >
   devops-test
 
@@ -51,3 +52,28 @@ Resources:
             Action: "sns:Publish"
             Resource: !Ref SNSBuildCircleTopic
             Principal: "*"
+
+  AlarmSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: AlarmTopic
+      Subscription:
+      - Protocol: email
+        Endpoint: mario.garciapinan@buildcircle.co.uk
+
+  Alarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: onErrorAlarm
+      AlarmActions:
+        - !Ref AlarmSNSTopic
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref BuildCircleHandler
+      EvaluationPeriods: 1
+      MetricName: Errors
+      Namespace: AWS/Lambda
+      Period: 60
+      Statistic: Sum
+      Threshold: '1'
