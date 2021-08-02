@@ -1,19 +1,16 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-
-Description: >
-  devops-test
+Description: 'devops-test
 
   Sample SAM Template for devops-test
-  
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+
+  '
 Globals:
   Function:
     Timeout: 3
-
 Resources:
   BuildCircleHandler:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       FunctionName: BuildCircle
       Handler: app.buildCircleHandler
@@ -22,37 +19,42 @@ Resources:
         SNSRecieved:
           Type: SNS
           Properties:
-            Topic: !Ref SNSBuildCircleTopic
-
+            Topic:
+              Ref: SNSBuildCircleTopic
+      CodeUri: BuildCircleHandler
   BuildCircleInvokePermission:
-    Type: "AWS::Lambda::Permission"
+    Type: AWS::Lambda::Permission
     Properties:
-      Action: "lambda:InvokeFunction"
-      FunctionName: !Ref BuildCircleHandler
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Ref: BuildCircleHandler
       Principal: sns.amazonaws.com
-
   SNSBuildCircleTopic:
     Type: AWS::SNS::Topic
     Properties:
-      DisplayName: !Sub "SNSBuildCircleTopic"
-      TopicName: !Sub "SNSBuildCircleTopic"
+      DisplayName:
+        Fn::Sub: SNSBuildCircleTopic
+      TopicName:
+        Fn::Sub: SNSBuildCircleTopic
       Subscription:
-        - Protocol: lambda
-          Endpoint: !GetAtt BuildCircleHandler.Arn
-    
+      - Protocol: lambda
+        Endpoint:
+          Fn::GetAtt:
+          - BuildCircleHandler
+          - Arn
   SNSBuildCircleTopicPolicy:
-    Type: "AWS::SNS::TopicPolicy"
+    Type: AWS::SNS::TopicPolicy
     Properties:
       Topics:
-        - !Ref SNSBuildCircleTopic
+      - Ref: SNSBuildCircleTopic
       PolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
-          - Effect: Allow
-            Action: "sns:Publish"
-            Resource: !Ref SNSBuildCircleTopic
-            Principal: "*"
-
+        - Effect: Allow
+          Action: sns:Publish
+          Resource:
+            Ref: SNSBuildCircleTopic
+          Principal: '*'
   AlarmSNSTopic:
     Type: AWS::SNS::Topic
     Properties:
@@ -60,34 +62,34 @@ Resources:
       Subscription:
       - Protocol: email
         Endpoint: mario.garciapinan@buildcircle.co.uk
-
   AlarmOnError:
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmName: onErrorAlarm
       AlarmActions:
-        - !Ref AlarmSNSTopic
+      - Ref: AlarmSNSTopic
       ComparisonOperator: GreaterThanOrEqualToThreshold
       Dimensions:
-        - Name: FunctionName
-          Value: !Ref BuildCircleHandler
+      - Name: FunctionName
+        Value:
+          Ref: BuildCircleHandler
       EvaluationPeriods: 1
       MetricName: Errors
       Namespace: AWS/Lambda
       Period: 60
       Statistic: Sum
       Threshold: '1'
-
   AlarmOnLog:
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmName: onLambdaTriggeredAlarm
       AlarmActions:
-        - !Ref AlarmSNSTopic
+      - Ref: AlarmSNSTopic
       ComparisonOperator: GreaterThanOrEqualToThreshold
       Dimensions:
-        - Name: FunctionName
-          Value: !Ref BuildCircleHandler
+      - Name: FunctionName
+        Value:
+          Ref: BuildCircleHandler
       EvaluationPeriods: 1
       MetricName: IncomingLogEvents
       Namespace: AWS/Logs
